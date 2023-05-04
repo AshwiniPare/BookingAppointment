@@ -48,7 +48,8 @@ function showUserOnScreen(myObj)
     deleteBtn.type="button";
     deleteBtn.value="Delete";
     deleteBtn.onclick = () => {
-        localStorage.removeItem(myObj.email);
+       // localStorage.removeItem(myObj.email);
+       axios.delete(`https://crudcrud.com/api/931c3d9d71d544b8b9b84ecb50d78760/appointmentData/${myObj._id}`)
         parentElem.removeChild(childElem);
     }
 
