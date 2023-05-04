@@ -23,10 +23,19 @@ function saveToLocalStorage(event)
     .catch((err) => {
         document.body.innerHTML = document.body.innerHTML + "<h4> something is wrong</h4>"
         console.error(err);
-    })
-    
-    
+    })   
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+    axios.get("https://crudcrud.com/api/931c3d9d71d544b8b9b84ecb50d78760/appointmentData")
+        .then((response) => {
+            console.log(response)
+
+            for(let i=0; i<response.data.length; i++)
+                showUserOnScreen(response.data[i]);
+        })
+        .catch(error => console.error(error))
+})
 
 function showUserOnScreen(myObj)
 {
