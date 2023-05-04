@@ -15,7 +15,7 @@ function saveToLocalStorage(event)
 
    // localStorage.setItem(myObj.email,JSON.stringify(myObj));
    //showUserOnScreen(myObj);
-    axios.post('https://crudcrud.com/api/931c3d9d71d544b8b9b84ecb50d78760/appointmentData', myObj)
+    axios.post('https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData', myObj)
     .then((response) => {
         showUserOnScreen(response.data)
         console.log(response)
@@ -27,7 +27,7 @@ function saveToLocalStorage(event)
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    axios.get("https://crudcrud.com/api/931c3d9d71d544b8b9b84ecb50d78760/appointmentData")
+    axios.get("https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData")
         .then((response) => {
             console.log(response)
 
@@ -49,8 +49,11 @@ function showUserOnScreen(myObj)
     deleteBtn.value="Delete";
     deleteBtn.onclick = () => {
        // localStorage.removeItem(myObj.email);
-       axios.delete(`https://crudcrud.com/api/931c3d9d71d544b8b9b84ecb50d78760/appointmentData/${myObj._id}`)
-        parentElem.removeChild(childElem);
+       axios.delete(`https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData/${myObj._id}`)
+        .then((response) => {
+            parentElem.removeChild(childElem);
+        })
+        .catch(error => console.error(error))
     }
 
     //Edit button
@@ -58,11 +61,15 @@ function showUserOnScreen(myObj)
     editBtn.type="button";
     editBtn.value='Edit';
     editBtn.onclick = () => {
-        localStorage.removeItem(myObj.email);
-        parentElem.removeChild(childElem);
-        document.getElementById('name').value = myObj.name;
-        document.getElementById('email').value =myObj.email;
-        document.getElementById('phone').value =myObj.phone;
+        //localStorage.removeItem(myObj.email);
+        axios.delete(`https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData/${myObj._id}`)
+            .then((response) => {
+                parentElem.removeChild(childElem);
+                document.getElementById('name').value = myObj.name;
+                document.getElementById('email').value =myObj.email;
+                document.getElementById('phone').value =myObj.phone;
+            })
+            .catch(error => console.error(error))
     }
     childElem.appendChild(editBtn);
     childElem.appendChild(deleteBtn);
