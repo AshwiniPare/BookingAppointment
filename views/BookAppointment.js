@@ -5,19 +5,19 @@ function saveToLocalStorage(event)
     event.preventDefault();
     const name = event.target.name.value;
     const email = event.target.email.value;
-    const phone = event.target.phone.value;
+    const phoneNumber = event.target.phone.value;
 
     const myObj = {
         name,
         email,
-        phone
+        phoneNumber
     }
 
    // localStorage.setItem(myObj.email,JSON.stringify(myObj));
    //showUserOnScreen(myObj);
-    axios.post('https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData', myObj)
+    axios.post('http://localhost:3000/user/add-user', myObj)
     .then((response) => {
-        showUserOnScreen(response.data)
+        showUserOnScreen(response.data.newUserDetail);
         console.log(response)
     })
     .catch((err) => {
@@ -27,12 +27,12 @@ function saveToLocalStorage(event)
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    axios.get("https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData")
+    axios.get("http://localhost:3000/user/get-users")
         .then((response) => {
             console.log(response)
 
-            for(let i=0; i<response.data.length; i++)
-                showUserOnScreen(response.data[i]);
+            for(let i=0; i<response.data.allUsers.length; i++)
+                showUserOnScreen(response.data.allUsers[i]);
         })
         .catch(error => console.error(error))
 })
@@ -41,7 +41,7 @@ function showUserOnScreen(myObj)
 {
     const parentElem = document.getElementById('items');
     const childElem = document.createElement('li');
-    childElem.textContent = myObj.name+"-"+myObj.email+"-"+myObj.phone;
+    childElem.textContent = myObj.name+"-"+myObj.email+"-"+myObj.phoneNumber;
 
     //adding delete button
     const deleteBtn = document.createElement('input');
@@ -49,7 +49,8 @@ function showUserOnScreen(myObj)
     deleteBtn.value="Delete";
     deleteBtn.onclick = () => {
        // localStorage.removeItem(myObj.email);
-       axios.delete(`https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData/${myObj._id}`)
+       console.log('for delete '+myObj.id);
+       axios.delete(`http://localhost:3000/user/delete-user/${myObj.id}`)
         .then((response) => {
             parentElem.removeChild(childElem);
         })
@@ -62,12 +63,12 @@ function showUserOnScreen(myObj)
     editBtn.value='Edit';
     editBtn.onclick = () => {
         //localStorage.removeItem(myObj.email);
-        axios.delete(`https://crudcrud.com/api/4c9da81845a449df82b4aa4a54866e16/appointmentData/${myObj._id}`)
+        axios.delete(`http://localhost:3000/user/delete-user/${myObj.id}`)
             .then((response) => {
                 parentElem.removeChild(childElem);
                 document.getElementById('name').value = myObj.name;
                 document.getElementById('email').value =myObj.email;
-                document.getElementById('phone').value =myObj.phone;
+                document.getElementById('phone').value =myObj.phoneNumber;
             })
             .catch(error => console.error(error))
     }
